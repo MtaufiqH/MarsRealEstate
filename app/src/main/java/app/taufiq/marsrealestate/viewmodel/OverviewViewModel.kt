@@ -3,6 +3,10 @@ package app.taufiq.marsrealestate.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import app.taufiq.marsrealestate.remote.MarsApi
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
  * Created By Taufiq on 8/15/2020.
@@ -27,6 +31,23 @@ class OverviewViewModel : ViewModel() {
      * Sets the value of the status LiveData to the Mars API status.
      */
     private fun getMarsRealEstateProperties() {
-        _response.value = "Set the Mars API Response here!"
+        MarsApi.retrofitService.getProperties().enqueue(object: Callback<String>{
+            /**
+             * the [onFailure] callback is called when the web service response fail
+             * */
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                _response.value = "failure ${t.message}"
+
+            }
+
+            /**
+             * [onResponse] Callback is called when the request is successful
+             * and web service return a response.
+             * */
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                _response.value = response.body()
+            }
+
+        })
     }
 }
