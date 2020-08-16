@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="viewmodel"
-            type="app.taufiq.marsrealestate.viewmodel.OverviewViewModel" />
+            name="property"
+            type="app.taufiq.marsrealestate.remote.MarsProperty" />
     </data>
 
     <ImageView
@@ -15,7 +15,7 @@
         android:layout_height="170dp"
         android:adjustViewBounds="true"
         android:padding="2dp"
-        app:imageUrl="@{viewmodel.property.imageSrcUrl}"
+        app:imageUrl="@{property.imageSrcUrl}"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/backgrounds/scenic"
         android:contentDescription="@string/mars_image" />
