@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import app.taufiq.marsrealestate.R
 import app.taufiq.marsrealestate.databinding.FragmentOverviewBinding
+import app.taufiq.marsrealestate.databinding.GridViewItemBinding
 import app.taufiq.marsrealestate.viewmodel.OverviewViewModel
 
 
@@ -31,7 +32,8 @@ class OverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentOverviewBinding.inflate(inflater)
+//         val binding = FragmentOverviewBinding.inflate(inflater)
+         val binding = GridViewItemBinding.inflate(inflater)
 
         // allows data binding to observe LiveData with the lifecycle of this fragment
         binding.lifecycleOwner = this

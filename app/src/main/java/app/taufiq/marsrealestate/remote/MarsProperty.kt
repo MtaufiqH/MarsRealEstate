@@ -19,16 +19,10 @@ import com.squareup.moshi.Json
  * "img_src":"http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000ML0044631300305227E03_DXXX.jpg"},
 ...]
 */
+
 data class MarsProperty(
-    @Json(name = "id")
     val id: String,
-
-    @Json(name = "type")
     val type: String,
-
-    @Json(name = "price")
-    val price: Long,
-
-    @Json(name = "img_src")
-    val imageSrcUrl: String
+    val price: Double,
+    @Json(name = "img_src") val imageSrcUrl: String
 )
