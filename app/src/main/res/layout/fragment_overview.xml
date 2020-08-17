@@ -46,7 +46,5 @@
             app:marsApiStatus="@{viewmodel.status}"
             android:contentDescription="@string/status" />
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

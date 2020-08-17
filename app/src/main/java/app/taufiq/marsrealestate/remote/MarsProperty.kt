@@ -18,11 +18,13 @@ import com.squareup.moshi.Json
  * "type":"rent",
  * "img_src":"http://mars.jpl.nasa.gov/msl-raw-images/msss/01000/mcam/1000ML0044631300305227E03_DXXX.jpg"},
 ...]
-*/
+ */
 
 data class MarsProperty(
     val id: String,
     val type: String,
     val price: Double,
     @Json(name = "img_src") val imageSrcUrl: String
-)
+) {
+    val isRent get() = type == "rent"
+}
