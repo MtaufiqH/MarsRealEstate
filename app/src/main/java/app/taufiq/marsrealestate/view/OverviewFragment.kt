@@ -3,7 +3,9 @@ package app.taufiq.marsrealestate.view
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import app.taufiq.marsrealestate.R
 import app.taufiq.marsrealestate.adapter.PhotoGridAdapter
 import app.taufiq.marsrealestate.databinding.FragmentOverviewBinding
@@ -43,7 +45,15 @@ class OverviewFragment : Fragment() {
         // give the binding access to OverviewViewModel
         binding.viewmodel = viewmodel
 
-        binding.marsRvId.adapter = PhotoGridAdapter()
+        binding.marsRvId.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener{
+            viewmodel.displayPropertyDetails(it)
+        })
+
+        // navigate to the Detail Fragment
+        viewmodel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
+            this.findNavController().navigate(OverviewFragmentDirections.toDetailAction(it))
+            viewmodel.displayPropertyDetailsComplete()
+        })
 
         setHasOptionsMenu(true)
 

@@ -13,7 +13,7 @@ import app.taufiq.marsrealestate.remote.MarsProperty
  *
  */
 
-class PhotoGridAdapter : ListAdapter<MarsProperty, PhotoGridAdapter.MarsViewHolder>(CallbackDiff) {
+class PhotoGridAdapter(private val onClickListener: OnClickListener) : ListAdapter<MarsProperty, PhotoGridAdapter.MarsViewHolder>(CallbackDiff) {
 
 
     class MarsViewHolder(private var binding: GridViewItemBinding): RecyclerView.ViewHolder(binding.root) {
@@ -33,6 +33,9 @@ class PhotoGridAdapter : ListAdapter<MarsProperty, PhotoGridAdapter.MarsViewHold
 
     override fun onBindViewHolder(holder: MarsViewHolder, position: Int) {
         val marsProperty = getItem(position)
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(marsProperty)
+        }
         holder.bind(marsProperty)
     }
 
@@ -47,6 +50,10 @@ class PhotoGridAdapter : ListAdapter<MarsProperty, PhotoGridAdapter.MarsViewHold
             return oldItem.id == newItem.id
         }
 
+    }
+
+    class OnClickListener(val clickListener: (marsProperty: MarsProperty) -> Unit){
+        fun onClick(marsProperty: MarsProperty) = clickListener(marsProperty)
     }
 }
 

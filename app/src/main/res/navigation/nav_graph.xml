@@ -11,16 +11,24 @@
         android:label="OverviewFragment"
         tools:layout="@layout/fragment_overview">
         <action
-            android:id="@+id/action_overviewFragment_to_detailFragment"
+            android:id="@+id/to_detail_Action"
             app:destination="@id/detailFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_back_left"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_back_left" />
+
     </fragment>
+
+
     <fragment
         android:id="@+id/detailFragment"
         android:name="app.taufiq.marsrealestate.view.DetailFragment"
         android:label="DetailFragment"
-        tools:layout="@layout/fragment_detail"/>
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="SelectedProperty"
+            app:argType="app.taufiq.marsrealestate.remote.MarsProperty" />
+    </fragment>
+
 </navigation>

@@ -1,6 +1,8 @@
 package app.taufiq.marsrealestate.remote
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
 /**
  * Created By Taufiq on 8/15/2020.
@@ -20,11 +22,12 @@ import com.squareup.moshi.Json
 ...]
  */
 
+@Parcelize
 data class MarsProperty(
     val id: String,
     val type: String,
     val price: Double,
-    @Json(name = "img_src") val imageSrcUrl: String
-) {
+    @Json(name = "img_src") val imageSrcUrl: String) : Parcelable {
+
     val isRent get() = type == "rent"
 }
