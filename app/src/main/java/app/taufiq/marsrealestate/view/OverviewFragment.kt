@@ -5,7 +5,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import app.taufiq.marsrealestate.R
+import app.taufiq.marsrealestate.adapter.PhotoGridAdapter
 import app.taufiq.marsrealestate.databinding.FragmentOverviewBinding
+import app.taufiq.marsrealestate.databinding.GridViewItemBinding
+import app.taufiq.marsrealestate.remote.MarsApiFilter
 import app.taufiq.marsrealestate.viewmodel.OverviewViewModel
 
 
@@ -31,13 +34,16 @@ class OverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentOverviewBinding.inflate(inflater)
+         val binding = FragmentOverviewBinding.inflate(inflater)
+//         val binding = GridViewItemBinding.inflate(inflater)
 
         // allows data binding to observe LiveData with the lifecycle of this fragment
         binding.lifecycleOwner = this
 
         // give the binding access to OverviewViewModel
         binding.viewmodel = viewmodel
+
+        binding.marsRvId.adapter = PhotoGridAdapter()
 
         setHasOptionsMenu(true)
 
@@ -49,6 +55,20 @@ class OverviewFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewmodel.updateFilter(
+            when(item.itemId){
+                R.id.show_rent_menu -> MarsApiFilter.SHOW_RENT
+                R.id.show_buy_menu -> MarsApiFilter.SHOW_BUY
+
+                else -> MarsApiFilter.SHOW_ALL
+            }
+        )
+
+        return true
     }
 
 }

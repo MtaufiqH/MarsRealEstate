@@ -1,15 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <ImageView
-        android:id="@+id/mars_image"
+        <variable
+            name="property"
+            type="app.taufiq.marsrealestate.remote.MarsProperty" />
+
+        <!-- You use imports when you want to use components
+         of a class inside a data binding
+         expression in a layout file  -->
+        <import type="android.view.View" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:adjustViewBounds="true"
-        android:padding="2dp"
-        android:scaleType="centerCrop"
-        tools:src="@tools:sample/backgrounds/scenic"
-        android:contentDescription="@string/mars_image" />
+        android:layout_height="170dp">
+
+        <ImageView
+            android:id="@+id/mars_image"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/mars_image"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{property.imageSrcUrl}"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:id="@+id/mars_property_type"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom|end"
+            android:padding="5dp"
+            android:adjustViewBounds="true"
+            android:visibility="@{property.rent ? View.GONE : View.VISIBLE}"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/ic_for_sale_outline"
+            android:src="@drawable/ic_for_sale_outline" />
+
+    </FrameLayout>
+
+
 </layout>
