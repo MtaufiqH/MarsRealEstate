@@ -18,6 +18,7 @@ enum class MarsApiStatus {
 }
 
 class OverviewViewModel : ViewModel() {
+
     // The internal MutableLiveData String that stores the most recent response
     private val _status = MutableLiveData<MarsApiStatus>()
 
@@ -25,12 +26,16 @@ class OverviewViewModel : ViewModel() {
     val status: LiveData<MarsApiStatus>
         get() = _status
 
-
+    // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
+    // with new values
     private val _properties = MutableLiveData<List<MarsProperty>>()
+
+    // The external LiveData interface to the property is immutable, so only this class can modif
     val properties: LiveData<List<MarsProperty>>
         get() = _properties
 
 
+    // LiveData to handle navigation to the selected property
     private val _navigateToSelectedProperty = MutableLiveData<MarsProperty>()
     val navigateToSelectedProperty : LiveData<MarsProperty>
     get() = _navigateToSelectedProperty
@@ -43,7 +48,10 @@ class OverviewViewModel : ViewModel() {
     }
 
     /**
-     * Sets the value of the status LiveData to the Mars API status.
+     * Gets filtered Mars real estate property information from the Mars API Retrofit service and
+     * updates the [MarsProperty] [List] and [MarsApiStatus] [LiveData]. The Retrofit service
+     * returns a coroutine Deferred, which we await to get the result of the transaction.
+     * @param filter the [MarsApiFilter] that is sent as part of the web server request
      */
     private fun getMarsRealEstateProperties(filter: MarsApiFilter) {
 
@@ -62,7 +70,7 @@ class OverviewViewModel : ViewModel() {
     }
 
 
-    /**an updateFilter() method
+    /** an updateFilter() method
      * that takes a MarsApiFilter argument and calls
      * getMarsRealEstateProperties() with that argument.
      * */
@@ -71,10 +79,17 @@ class OverviewViewModel : ViewModel() {
     }
 
 
+    /**
+     * When the property is clicked, set the [_navigateToSelectedProperty] [MutableLiveData]
+     * @param marsProperty The [MarsProperty] that was clicked on.
+     */
     fun displayPropertyDetails(marsProperty: MarsProperty){
         _navigateToSelectedProperty.value = marsProperty
     }
 
+    /**
+     * After the navigation has taken place, make sure navigateToSelectedProperty is set to null
+     */
     fun displayPropertyDetailsComplete(){
         _navigateToSelectedProperty.value = null
     }

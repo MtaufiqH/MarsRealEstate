@@ -1,6 +1,7 @@
 package app.taufiq.marsrealestate.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -9,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import app.taufiq.marsrealestate.R
 import app.taufiq.marsrealestate.adapter.PhotoGridAdapter
 import app.taufiq.marsrealestate.databinding.FragmentOverviewBinding
-import app.taufiq.marsrealestate.databinding.GridViewItemBinding
 import app.taufiq.marsrealestate.remote.MarsApiFilter
 import app.taufiq.marsrealestate.viewmodel.OverviewViewModel
 
@@ -36,7 +36,7 @@ class OverviewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         val binding = FragmentOverviewBinding.inflate(inflater)
+        val binding = FragmentOverviewBinding.inflate(inflater)
 //         val binding = GridViewItemBinding.inflate(inflater)
 
         // allows data binding to observe LiveData with the lifecycle of this fragment
@@ -45,14 +45,24 @@ class OverviewFragment : Fragment() {
         // give the binding access to OverviewViewModel
         binding.viewmodel = viewmodel
 
-        binding.marsRvId.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener{
-            viewmodel.displayPropertyDetails(it)
+        // Sets the adapter of the photosGrid RecyclerView with clickHandler lambda that
+        // tells the viewModel when our property is clicked
+        binding.marsRvId.adapter = PhotoGridAdapter(PhotoGridAdapter.OnClickListener { property ->
+            viewmodel.displayPropertyDetails(property)
         })
 
-        // navigate to the Detail Fragment
+        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+        // for another navigation event.
         viewmodel.navigateToSelectedProperty.observe(viewLifecycleOwner, Observer {
-            this.findNavController().navigate(OverviewFragmentDirections.toDetailAction(it))
-            viewmodel.displayPropertyDetailsComplete()
+            if (it != null) {
+                val action = OverviewFragmentDirections.toDetailAction(it)
+                this.findNavController().navigate(action)
+
+                viewmodel.displayPropertyDetailsComplete()
+
+            }
+
         })
 
         setHasOptionsMenu(true)
@@ -62,15 +72,22 @@ class OverviewFragment : Fragment() {
     }
 
 
+    /**
+     * Inflates the overflow menu that contains filtering options.
+     */
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
 
+    /**
+     * Updates the filter in the [OverviewViewModel] when the menu items are selected from the
+     * overflow menu.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         viewmodel.updateFilter(
-            when(item.itemId){
+            when (item.itemId) {
                 R.id.show_rent_menu -> MarsApiFilter.SHOW_RENT
                 R.id.show_buy_menu -> MarsApiFilter.SHOW_BUY
 
